@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-App Feedback Dashboard</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/recharts@2.5.0/dist/Recharts.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #2d3748;
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #718096;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            padding: 24px;
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stat-card.purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-card.green { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); }
+        .stat-card.red { background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%); }
+        .stat-card.blue { background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .stat-change {
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+
+        /* ========================================
+           📊 DATA SECTION - UPDATE THIS MONTHLY
+           ========================================
+           
+           To add a new month (e.g., October):
+           1. Add data to each array following the same pattern
+           2. Example: { month: 'October', Positive: 55, Negative: 60, Neutral: 30 }
+           3. Save this file
+           4. Deploy to Vercel (it will auto-update if connected to GitHub)
+        */
+
+        const dashboardData = {
+            // Overall sentiment counts
+            overallSentiment: [
+                { month: 'June', Positive: 48, Negative: 130, Neutral: 12 },
+                { month: 'July', Positive: 34, Negative: 114, Neutral: 12 },
+                { month: 'August', Positive: 46, Negative: 78, Neutral: 19 },
+                { month: 'September', Positive: 52, Negative: 62, Neutral: 29 }
+                // Add October here: { month: 'October', Positive: X, Negative: Y, Neutral: Z }
+            ],
+            
+            // Sentiment percentages
+            sentimentPercent: [
+                { month: 'June', Positive: 25.3, Negative: 68.4, Neutral: 6.3 },
+                { month: 'July', Positive: 21.3, Negative: 71.3, Neutral: 7.5 },
+                { month: 'August', Positive: 32.2, Negative: 54.5, Neutral: 13.3 },
+                { month: 'September', Positive: 36.1, Negative: 43.1, Neutral: 20.1 }
+            ],
+            
+            // Top categories by month
+            topCategories: [
+                { month: 'June', 'Sentiment Only': 69, 'UI & Nav': 26, 'Stability': 3, 'Performance': 1, 'Alerts': 22 },
+                { month: 'July', 'Sentiment Only': 22, 'UI & Nav': 31, 'Stability': 27, 'Performance': 7, 'Alerts': 24 },
+                { month: 'August', 'Sentiment Only': 51, 'UI & Nav': 26, 'Stability': 12, 'Performance': 10, 'Alerts': 2 },
+                { month: 'September', 'Sentiment Only': 66, 'UI & Nav': 24, 'Stability': 10, 'Performance': 8, 'Alerts': 1 }
+            ],
+            
+            // Critical issues tracking
+            criticalIssues: [
+                { month: 'June', Alerts: 22, Stability: 3 },
+                { month: 'July', Alerts: 24, Stability: 27 },
+                { month: 'August', Alerts: 2, Stability: 12 },
+                { month: 'September', Alerts: 1, Stability: 10 }
+            ],
+            
+            // Guest user sentiment
+            guestSentiment: [
+                { month: 'June', Positive: 22, Negative: 30, Neutral: 0 },
+                { month: 'July', Positive: 12, Negative: 23, Neutral: 2 },
+                { month: 'August', Positive: 25, Negative: 21, Neutral: 7 },
+                { month: 'September', Positive: 25, Negative: 19, Neutral: 6 }
+            ],
+            
+            // Regular user sentiment
+            regularSentiment: [
+                { month: 'June', Positive: 26, Negative: 100, Neutral: 12 },
+                { month: 'July', Positive: 22, Negative: 91, Neutral: 10 },
+                { month: 'August', Positive: 21, Negative: 57, Neutral: 12 },
+                { month: 'September', Positive: 27, Negative: 41, Neutral: 23 }
+            ],
+            
+            // Top 5 guest issues
+            topGuestIssues: [
+                { issue: 'Sentiment', June: 24, July: 10, August: 28, Sept: 31 },
+                { issue: 'UI & Nav', June: 16, July: 12, August: 15, Sept: 10 },
+                { issue: 'File Mgmt', June: 4, July: 4, August: 4, Sept: 0 },
+                { issue: 'Doc Funcs', June: 0, July: 5, August: 1, Sept: 2 },
+                { issue: 'Enhancement', June: 2, July: 0, August: 0, Sept: 3 }
+            ],
+            
+            // Top 5 regular user issues
+            topRegularIssues: [
+                { issue: 'Sentiment', June: 45, July: 12, August: 23, Sept: 35 },
+                { issue: 'Alerts', June: 22, July: 24, August: 0, Sept: 0 },
+                { issue: 'Stability', June: 0, July: 27, August: 11, Sept: 0 },
+                { issue: 'UI & Nav', June: 10, July: 19, August: 11, Sept: 14 },
+                { issue: 'Performance', June: 0, July: 0, August: 8, Sept: 8 }
+            ]
+        };
+
+        /* ======================================== */
+
+        function Dashboard() {
+            const latest = dashboardData.overallSentiment[dashboardData.overallSentiment.length - 1];
+            const previous = dashboardData.overallSentiment[dashboardData.overallSentiment.length - 2];
+            const posChange = latest.Positive - previous.Positive;
+            const negChange = latest.Negative - previous.Negative;
+            const total = latest.Positive + latest.Negative + latest.Neutral;
+
+            return (
+                <div className="container">
+                    <h1>📊 In-App Feedback Dashboard</h1>
+                    <p className="subtitle">June - September 2025 | Tracking User Sentiment & Issues</p>
+                    
+                    <div className="stats-row">
+                        <div className="stat-card purple">
+                            <div className="stat-label">Latest Total Responses</div>
+                            <div className="stat-value">{total}</div>
+                            <div className="stat-change">September 2025</div>
+                        </div>
+                        <div className="stat-card green">
+                            <div className="stat-label">Positive Feedback</div>
+                            <div className="stat-value">{latest.Positive}</div>
+                            <div className="stat-change">{posChange > 0 ? '↑' : '↓'} {Math.abs(posChange)} from August</div>
+                        </div>
+                        <div className="stat-card red">
+                            <div className="stat-label">Negative Feedback</div>
+                            <div className="stat-value">{latest.Negative}</div>
+                            <div className="stat-change">{negChange < 0 ? '↓' : '↑'} {Math.abs(negChange)} from August</div>
+                        </div>
+                        <div className="stat-card blue">
+                            <div className="stat-label">Positive Rate</div>
+                            <div className="stat-value">{((latest.Positive / total) * 100).toFixed(0)}%</div>
+                            <div className="stat-change">Current Month</div>
+                        </div>
+                    </div>
+
+                    <div className="charts-grid">
+                        {/* Overall Sentiment */}
+                        <div className="chart-container">
+                            <div className="chart-title">📈 Overall Sentiment Trend</div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart data={dashboardData.overallSentiment}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Area type="monotone" dataKey="Positive" stackId="1" stroke="#48bb78" fill="#48bb78" fillOpacity={0.8} />
+                                    <Area type="monotone" dataKey="Neutral" stackId="1" stroke="#ecc94b" fill="#ecc94b" fillOpacity={0.8} />
+                                    <Area type="monotone" dataKey="Negative" stackId="1" stroke="#f56565" fill="#f56565" fillOpacity={0.8} />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Sentiment Percentages */}
+                        <div className="chart-container">
+                            <div className="chart-title">% Sentiment Over Time</div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <LineChart data={dashboardData.sentimentPercent}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="Positive" stroke="#48bb78" strokeWidth={3} dot={{ r: 5 }} />
+                                    <Line type="monotone" dataKey="Negative" stroke="#f56565" strokeWidth={3} dot={{ r: 5 }} />
+                                    <Line type="monotone" dataKey="Neutral" stroke="#ecc94b" strokeWidth={3} dot={{ r: 5 }} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Top Categories */}
+                        <div className="chart-container">
+                            <div className="chart-title">📊 Top Categories</div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <LineChart data={dashboardData.topCategories}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="Sentiment Only" stroke="#667eea" strokeWidth={2} />
+                                    <Line type="monotone" dataKey="UI & Nav" stroke="#f093fb" strokeWidth={2} />
+                                    <Line type="monotone" dataKey="Stability" stroke="#ed8936" strokeWidth={2} />
+                                    <Line type="monotone" dataKey="Alerts" stroke="#f56565" strokeWidth={2} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Critical Issues */}
+                        <div className="chart-container">
+                            <div className="chart-title">🚨 Critical Issues</div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <BarChart data={dashboardData.criticalIssues}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="Alerts" fill="#f56565" />
+                                    <Bar dataKey="Stability" fill="#ed8936" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Guest Sentiment */}
+                        <div className="chart-container">
+                            <div className="chart-title">👤 Guest User Sentiment</div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart data={dashboardData.guestSentiment}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Area type="monotone" dataKey="Positive" stackId="1" stroke="#48bb78" fill="#48bb78" fillOpacity={0.8} />
+                                    <Area type="monotone" dataKey="Neutral" stackId="1" stroke="#ecc94b" fill="#ecc94b" fillOpacity={0.8} />
+                                    <Area type="monotone" dataKey="Negative" stackId="1" stroke="#f56565" fill="#f56565" fillOpacity={0.8} />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Regular Sentiment */}
+                        <div className="chart-container">
+                            <div className="chart-title">👥 Regular User Sentiment</div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart data={dashboardData.regularSentiment}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Area type="monotone" dataKey="Positive" stackId="1" stroke="#48bb78" fill="#48bb78" fillOpacity={0.8} />
+                                    <Area type="monotone" dataKey="Neutral" stackId="1" stroke="#ecc94b" fill="#ecc94b" fillOpacity={0.8} />
+                                    <Area type="monotone" dataKey="Negative" stackId="1" stroke="#f56565" fill="#f56565" fillOpacity={0.8} />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Top Guest Issues */}
+                        <div className="chart-container">
+                            <div className="chart-title">🔝 Top 5 Guest Issues</div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <BarChart data={dashboardData.topGuestIssues}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="issue" angle={-15} textAnchor="end" height={80} />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="June" fill="#667eea" />
+                                    <Bar dataKey="July" fill="#764ba2" />
+                                    <Bar dataKey="August" fill="#f093fb" />
+                                    <Bar dataKey="Sept" fill="#4facfe" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Top Regular Issues */}
+                        <div className="chart-container">
+                            <div className="chart-title">🔝 Top 5 Regular User Issues</div>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <BarChart data={dashboardData.topRegularIssues}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                                    <XAxis dataKey="issue" angle={-15} textAnchor="end" height={80} />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="June" fill="#667eea" />
+                                    <Bar dataKey="July" fill="#764ba2" />
+                                    <Bar dataKey="August" fill="#f093fb" />
+                                    <Bar dataKey="Sept" fill="#4facfe" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Dashboard />);
+    </script>
+</body>
+</html>
