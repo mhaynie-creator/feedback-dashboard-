@@ -152,13 +152,18 @@
                 </div>
 
                 <div class="chart-container">
-                    <div class="chart-title">📊 Top Categories</div>
+                    <div class="chart-title">📊 Overall Functional Categories</div>
                     <canvas id="chart3"></canvas>
                 </div>
 
                 <div class="chart-container">
-                    <div class="chart-title">🚨 Critical Issues</div>
+                    <div class="chart-title">👤 Top 5 Guest Categories</div>
                     <canvas id="chart4"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">👥 Top 5 Regular User Categories</div>
+                    <canvas id="chart9"></canvas>
                 </div>
 
                 <div class="chart-container">
@@ -277,39 +282,81 @@
                 }
             });
 
-            // Chart 3: Top Categories
+            // Chart 3: ALL Functional Categories
             new Chart(document.getElementById('chart3'), {
-                type: 'line',
+                type: 'bar',
+                data: {
+                    labels: ['Sentiment Only', 'UI & Nav', 'System Stability', 'Performance', 'File Mgmt', 'Dislike New', 'Doc Functions', 'Enhancement', 'Login', 'Visual', 'Search', 'Alerts', 'Mobile', 'Collab'],
+                    datasets: [
+                        {
+                            label: 'June',
+                            data: [69, 26, 3, 1, 4, 2, 19, 2, 2, 10, 3, 22, 0, 0],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)'
+                        },
+                        {
+                            label: 'July',
+                            data: [22, 31, 27, 7, 4, 6, 14, 10, 4, 2, 3, 24, 1, 0],
+                            backgroundColor: 'rgba(118, 75, 162, 0.8)'
+                        },
+                        {
+                            label: 'August',
+                            data: [51, 26, 12, 10, 8, 8, 7, 7, 5, 3, 3, 2, 1, 0],
+                            backgroundColor: 'rgba(240, 147, 251, 0.8)'
+                        },
+                        {
+                            label: 'Sept',
+                            data: [66, 24, 10, 8, 3, 2, 10, 10, 2, 1, 0, 1, 0, 2],
+                            backgroundColor: 'rgba(79, 172, 254, 0.8)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: { 
+                        y: { beginAtZero: true },
+                        x: { 
+                            ticks: { 
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    },
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+
+            // Chart 4: Top 5 Guest Categories by Month
+            new Chart(document.getElementById('chart4'), {
+                type: 'bar',
                 data: {
                     labels: months,
                     datasets: [
                         {
                             label: 'Sentiment Only',
-                            data: [69, 22, 51, 66],
-                            borderColor: 'rgb(102, 126, 234)',
-                            borderWidth: 2,
-                            tension: 0.4
+                            data: [24, 10, 28, 31],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)'
                         },
                         {
-                            label: 'UI & Nav',
-                            data: [26, 31, 26, 24],
-                            borderColor: 'rgb(240, 147, 251)',
-                            borderWidth: 2,
-                            tension: 0.4
+                            label: 'UI & Navigation',
+                            data: [16, 12, 15, 10],
+                            backgroundColor: 'rgba(240, 147, 251, 0.8)'
                         },
                         {
-                            label: 'Stability',
-                            data: [3, 27, 12, 10],
-                            borderColor: 'rgb(237, 137, 54)',
-                            borderWidth: 2,
-                            tension: 0.4
+                            label: 'File Management',
+                            data: [4, 4, 4, 0],
+                            backgroundColor: 'rgba(79, 172, 254, 0.8)'
                         },
                         {
-                            label: 'Alerts',
-                            data: [22, 24, 2, 1],
-                            borderColor: 'rgb(245, 101, 101)',
-                            borderWidth: 2,
-                            tension: 0.4
+                            label: 'Document Functions',
+                            data: [0, 5, 1, 2],
+                            backgroundColor: 'rgba(237, 137, 54, 0.8)'
+                        },
+                        {
+                            label: 'Enhancement',
+                            data: [2, 0, 0, 3],
+                            backgroundColor: 'rgba(236, 201, 75, 0.8)'
                         }
                     ]
                 },
@@ -321,21 +368,36 @@
                 }
             });
 
-            // Chart 4: Critical Issues
-            new Chart(document.getElementById('chart4'), {
+            // Chart 9: Top 5 Regular User Categories by Month
+            new Chart(document.getElementById('chart9'), {
                 type: 'bar',
                 data: {
                     labels: months,
                     datasets: [
                         {
+                            label: 'Sentiment Only',
+                            data: [45, 12, 23, 35],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)'
+                        },
+                        {
+                            label: 'System Stability',
+                            data: [0, 27, 11, 0],
+                            backgroundColor: 'rgba(237, 137, 54, 0.8)'
+                        },
+                        {
                             label: 'Alerts',
-                            data: [22, 24, 2, 1],
+                            data: [22, 24, 0, 0],
                             backgroundColor: 'rgba(245, 101, 101, 0.8)'
                         },
                         {
-                            label: 'Stability',
-                            data: [3, 27, 12, 10],
-                            backgroundColor: 'rgba(237, 137, 54, 0.8)'
+                            label: 'UI & Navigation',
+                            data: [10, 19, 11, 14],
+                            backgroundColor: 'rgba(240, 147, 251, 0.8)'
+                        },
+                        {
+                            label: 'Performance',
+                            data: [0, 0, 8, 8],
+                            backgroundColor: 'rgba(79, 172, 254, 0.8)'
                         }
                     ]
                 },
@@ -490,4 +552,3 @@
     </script>
 </body>
 </html>
-
