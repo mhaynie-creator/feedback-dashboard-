@@ -224,6 +224,98 @@
         .count-positive { color: var(--positive); }
         .count-negative { color: var(--negative); }
         
+        /* Yearly badge for sections that don't respond to month selection */
+        .yearly-badge {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--revver-teal-light);
+            background: rgba(49, 151, 149, 0.15);
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-left: auto;
+        }
+        
+        /* Three-source ranking grid */
+        .ranking-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .ranking-column {
+            background: var(--bg-card-hover);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .ranking-column-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .ranking-column-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .ranking-column-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .ranking-column-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .ranking-list { display: flex; flex-direction: column; gap: 8px; }
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        .ranking-position {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .pos-1 { background: linear-gradient(135deg, #F6E05E, #D69E2E); color: #744210; }
+        .pos-2 { background: linear-gradient(135deg, #CBD5E0, #A0AEC0); color: #2D3748; }
+        .pos-3 { background: linear-gradient(135deg, #ED8936, #C05621); color: white; }
+        .pos-other { background: var(--border-color); color: var(--text-secondary); }
+        .ranking-name { flex: 1; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ranking-count { font-weight: 600; color: var(--text-secondary); }
+        
+        /* Period indicator that shows current selection */
+        .period-indicator {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, var(--revver-purple), var(--revver-teal));
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         /* Tooltip styling for enhanced trend chart */
         .trend-tooltip {
             background: var(--bg-card) !important;
@@ -268,6 +360,7 @@
         @media (max-width: 1200px) {
             .stats-row { grid-template-columns: repeat(2, 1fr); }
             .charts-grid, .two-column, .comparison-section, .domain-section { grid-template-columns: 1fr; }
+            .ranking-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 768px) {
             .header { flex-direction: column; gap: 20px; padding: 20px; }
@@ -281,7 +374,7 @@
         <div class="logo-section">
             <div class="logo">R</div>
             <div class="header-title">
-                <h1>In-App Feedback Dashboard</h1>
+                <h1>In-App Feedback Dashboard <span id="periodIndicator" class="period-indicator">Full Year 2025</span></h1>
                 <p>2025 Customer Feedback Analysis</p>
             </div>
         </div>
@@ -310,22 +403,25 @@
             <div class="chart-card" style="margin-bottom: 0; border-left: 4px solid var(--positive);">
                 <div class="chart-title">
                     <span class="chart-title-icon icon-positive" style="background: rgba(72, 187, 120, 0.2);">👍</span>
-                    Most Liked Features (2025)
-                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 400; margin-left: auto;">Positive feedback by category</span>
+                    Most Liked Features
+                    <span class="yearly-badge">📅 Yearly</span>
                 </div>
                 <div class="feature-ranking" id="mostLikedFeatures"></div>
             </div>
             <div class="chart-card" style="margin-bottom: 0; border-left: 4px solid var(--negative);">
                 <div class="chart-title">
                     <span class="chart-title-icon icon-negative" style="background: rgba(245, 101, 101, 0.2);">👎</span>
-                    Most Complained About Features (2025)
-                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 400; margin-left: auto;">Negative feedback by category</span>
+                    Most Complained About Features
+                    <span class="yearly-badge">📅 Yearly</span>
                 </div>
                 <div class="feature-ranking" id="mostComplainedFeatures"></div>
             </div>
         </section>
         
-        <!-- Stats Row -->
+        <!-- Stats Row - RESPONDS TO PERIOD SELECTION -->
+        <div class="section-header" style="margin-bottom: 16px;">
+            <span style="font-size: 14px; color: var(--text-muted);">📊 These sections update based on period selection above ↗</span>
+        </div>
         <section class="stats-row">
             <div class="stat-card">
                 <div class="stat-label">Total Feedback</div>
@@ -353,7 +449,8 @@
         <section class="chart-card">
             <div class="chart-title">
                 <span class="chart-title-icon icon-purple">📊</span>
-                Feedback by Category & Sentiment (Yearly)
+                Feedback by Category & Sentiment
+                <span class="yearly-badge">📅 Yearly</span>
             </div>
             <div class="chart-container-tall">
                 <canvas id="categorySentimentChart"></canvas>
@@ -369,7 +466,8 @@
         <section class="chart-card">
             <div class="chart-title">
                 <span class="chart-title-icon icon-teal">👥</span>
-                Guest vs Regular User Breakdown by Category & Sentiment (Yearly)
+                Guest vs Regular User Breakdown by Category & Sentiment
+                <span class="yearly-badge">📅 Yearly</span>
             </div>
             <div style="overflow-x: auto;">
                 <table class="breakdown-table" id="breakdownTable">
@@ -406,12 +504,73 @@
         
         <div class="section-divider"></div>
         
+        <!-- NEW: VoC Section Header -->
+        <div class="section-header">
+            🎤 Voice of Customer (VoC) Analysis
+            <span>Cross-functional meeting themes, Jan-Oct 2025</span>
+        </div>
+        
+        <!-- NEW: Three-Source Ranking Comparison -->
+        <section class="chart-card">
+            <div class="chart-title">
+                <span class="chart-title-icon" style="background: rgba(237, 137, 54, 0.2);">🏆</span>
+                Category Rankings Across All Sources
+                <span class="yearly-badge">📅 2025</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+                Compare how categories rank by volume across In-App Feedback, Tech Services, and VoC Meetings
+            </p>
+            <div id="threeSourceRanking" class="ranking-grid"></div>
+        </section>
+        
+        <!-- NEW: VoC vs In-App Comparison -->
+        <section class="two-column">
+            <div class="chart-card" style="margin-bottom: 0;">
+                <div class="chart-title">
+                    <span class="chart-title-icon icon-purple">📊</span>
+                    VoC vs In-App: Top Themes
+                    <span class="yearly-badge">📅 2025</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="vocVsInAppChart"></canvas>
+                </div>
+                <div class="bar-legend" style="margin-top: 16px;">
+                    <div class="bar-legend-item"><div class="bar-legend-dot" style="background: #9F7AEA;"></div> VoC Meetings (177 total)</div>
+                    <div class="bar-legend-item"><div class="bar-legend-dot" style="background: #6B46C1;"></div> In-App Feedback (1,232 total)</div>
+                </div>
+            </div>
+            <div class="chart-card" style="margin-bottom: 0;">
+                <div class="chart-title">
+                    <span class="chart-title-icon icon-teal">📈</span>
+                    VoC Monthly Volume Trend
+                    <span class="yearly-badge">📅 Jan-Oct</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="vocMonthlyChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <!-- NEW: VoC Top Categories by Month Heatmap-style -->
+        <section class="chart-card">
+            <div class="chart-title">
+                <span class="chart-title-icon icon-green">🗓️</span>
+                VoC Category Trends by Month
+                <span class="yearly-badge">📅 Jan-Oct</span>
+            </div>
+            <div class="chart-container-tall">
+                <canvas id="vocHeatmapChart"></canvas>
+            </div>
+        </section>
+        
+        <div class="section-divider"></div>
+        
         <!-- NEW: In-App vs Tech Services Comparison -->
         <section class="chart-card">
             <div class="chart-title">
                 <span class="chart-title-icon icon-orange">🔄</span>
-                In-App Feedback vs Tech Services (Regular Users, Jun-Oct 2025)
-                <span style="font-size: 12px; color: var(--text-muted); font-weight: 400; margin-left: auto;">Comparing feedback sources by category</span>
+                In-App Feedback vs Tech Services (Regular Users)
+                <span class="yearly-badge">📅 Jun-Oct</span>
             </div>
             <div class="chart-container-tall">
                 <canvas id="sourceComparisonChart"></canvas>
@@ -719,11 +878,76 @@
                 ],
                 inAppRegular: [1, 11, 76, 6, 41, 4, 32, 14, 14],
                 techServices: [268, 45, 121, 52, 84, 483, 95, 17, 32]
+            },
+            // NEW: VoC (Voice of Customer) data - Jan-Oct 2025
+            vocData: {
+                monthly: {
+                    "2025-01": {"Metadata and Smart Extract":1,"Automations and Workflows":0,"Collaboration":3,"Document Functions":1,"Account Management and Settings":1,"File Management":0,"User Interface & Navigation":1,"Search":1,"Email, Notifications and Alerts":0,"Login & Access":0,"Performance & Speed":0,"Mobile and Responsiveness":0,"System Stability":1,"Integrations":0,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-02": {"Metadata and Smart Extract":1,"Automations and Workflows":4,"Collaboration":5,"Document Functions":0,"Account Management and Settings":0,"File Management":0,"User Interface & Navigation":0,"Search":0,"Email, Notifications and Alerts":0,"Login & Access":0,"Performance & Speed":0,"Mobile and Responsiveness":0,"System Stability":0,"Integrations":0,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-03": {"Metadata and Smart Extract":1,"Automations and Workflows":3,"Collaboration":2,"Document Functions":0,"Account Management and Settings":0,"File Management":0,"User Interface & Navigation":1,"Search":0,"Email, Notifications and Alerts":1,"Login & Access":1,"Performance & Speed":0,"Mobile and Responsiveness":0,"System Stability":0,"Integrations":0,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-04": {"Metadata and Smart Extract":2,"Automations and Workflows":4,"Collaboration":1,"Document Functions":2,"Account Management and Settings":1,"File Management":1,"User Interface & Navigation":0,"Search":0,"Email, Notifications and Alerts":0,"Login & Access":0,"Performance & Speed":0,"Mobile and Responsiveness":0,"System Stability":0,"Integrations":0,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-05": {"Metadata and Smart Extract":3,"Automations and Workflows":3,"Collaboration":5,"Document Functions":3,"Account Management and Settings":2,"File Management":2,"User Interface & Navigation":0,"Search":1,"Email, Notifications and Alerts":1,"Login & Access":0,"Performance & Speed":0,"Mobile and Responsiveness":0,"System Stability":0,"Integrations":0,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-06": {"Metadata and Smart Extract":6,"Automations and Workflows":3,"Collaboration":2,"Document Functions":1,"Account Management and Settings":2,"File Management":2,"User Interface & Navigation":1,"Search":1,"Email, Notifications and Alerts":1,"Login & Access":2,"Performance & Speed":0,"Mobile and Responsiveness":0,"System Stability":0,"Integrations":0,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-07": {"Metadata and Smart Extract":14,"Automations and Workflows":6,"Collaboration":2,"Document Functions":3,"Account Management and Settings":4,"File Management":9,"User Interface & Navigation":5,"Search":2,"Email, Notifications and Alerts":1,"Login & Access":0,"Performance & Speed":2,"Mobile and Responsiveness":1,"System Stability":0,"Integrations":0,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-08": {"Metadata and Smart Extract":0,"Automations and Workflows":1,"Collaboration":1,"Document Functions":1,"Account Management and Settings":3,"File Management":0,"User Interface & Navigation":0,"Search":0,"Email, Notifications and Alerts":0,"Login & Access":0,"Performance & Speed":0,"Mobile and Responsiveness":0,"System Stability":0,"Integrations":1,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-09": {"Metadata and Smart Extract":3,"Automations and Workflows":4,"Collaboration":0,"Document Functions":2,"Account Management and Settings":2,"File Management":0,"User Interface & Navigation":0,"Search":2,"Email, Notifications and Alerts":0,"Login & Access":0,"Performance & Speed":1,"Mobile and Responsiveness":1,"System Stability":0,"Integrations":0,"Dislike New Experience":0,"Visual & Accessibility":0},
+                    "2025-10": {"Metadata and Smart Extract":6,"Automations and Workflows":3,"Collaboration":4,"Document Functions":6,"Account Management and Settings":2,"File Management":1,"User Interface & Navigation":0,"Search":1,"Email, Notifications and Alerts":1,"Login & Access":0,"Performance & Speed":0,"Mobile and Responsiveness":0,"System Stability":1,"Integrations":0,"Dislike New Experience":1,"Visual & Accessibility":0}
+                },
+                yearly: {
+                    "Metadata and Smart Extract": 37,
+                    "Automations and Workflows": 31,
+                    "Collaboration": 25,
+                    "Document Functions": 19,
+                    "Account Management and Settings": 17,
+                    "File Management": 15,
+                    "User Interface & Navigation": 8,
+                    "Search": 8,
+                    "Email, Notifications and Alerts": 5,
+                    "Login & Access": 3,
+                    "Performance & Speed": 3,
+                    "Mobile and Responsiveness": 2,
+                    "System Stability": 2,
+                    "Integrations": 1,
+                    "Dislike New Experience": 1,
+                    "Visual & Accessibility": 0
+                },
+                monthlyTotals: [8, 10, 8, 11, 20, 18, 44, 6, 15, 25]
+            },
+            // In-App yearly totals (excluding Sentiment Only for comparison)
+            inAppYearly: {
+                "Dislike New Experience": 206,
+                "Document Functions": 168,
+                "User Interface & Navigation": 163,
+                "File Management": 156,
+                "Performance & Speed": 115,
+                "Login & Access": 100,
+                "System Stability": 84,
+                "Visual & Accessibility": 60,
+                "Collaboration": 56,
+                "Search": 40,
+                "Metadata and Smart Extract": 24,
+                "Automations and Workflows": 20,
+                "Email, Notifications and Alerts": 12,
+                "Integrations": 10,
+                "Mobile and Responsiveness": 10,
+                "Account Management and Settings": 6
+            },
+            // Tech Services yearly (Jun-Oct)
+            techServicesYearly: {
+                "Integrations": 483,
+                "Account Management and Settings": 268,
+                "Document Functions": 121,
+                "Login & Access": 95,
+                "File Management": 84,
+                "Email, Notifications and Alerts": 52,
+                "Automations and Workflows": 45,
+                "Search": 32,
+                "Metadata and Smart Extract": 17
             }
         };
 
         // ============= CHART INSTANCES =============
-        let categoryChart, sentimentChart, userTypeChart, systemChart, categorySentimentChart, enhancedTrendChart, sourceComparisonChart;
+        let categoryChart, sentimentChart, userTypeChart, systemChart, categorySentimentChart, enhancedTrendChart, sourceComparisonChart, vocVsInAppChart, vocMonthlyChart, vocHeatmapChart;
 
         // ============= INITIALIZATION =============
         function initCharts() {
@@ -939,6 +1163,151 @@
                             grid: { display: false },
                             ticks: { color: '#F7FAFC', font: { size: 11 } }
                         }
+                    }
+                }
+            });
+
+            // 3b. VoC vs In-App Comparison Chart
+            const vocVsInAppCtx = document.getElementById('vocVsInAppChart').getContext('2d');
+            const vocYearly = dashboardData.vocData.yearly;
+            const inAppYearly = dashboardData.inAppYearly;
+            
+            // Get top 10 categories by combined volume
+            const allCats = [...new Set([...Object.keys(vocYearly), ...Object.keys(inAppYearly)])];
+            const combinedData = allCats.map(cat => ({
+                name: cat,
+                voc: vocYearly[cat] || 0,
+                inApp: inAppYearly[cat] || 0,
+                total: (vocYearly[cat] || 0) + (inAppYearly[cat] || 0)
+            })).sort((a, b) => b.total - a.total).slice(0, 10);
+            
+            vocVsInAppChart = new Chart(vocVsInAppCtx, {
+                type: 'bar',
+                data: {
+                    labels: combinedData.map(d => d.name),
+                    datasets: [
+                        {
+                            label: 'VoC Meetings',
+                            data: combinedData.map(d => d.voc),
+                            backgroundColor: '#9F7AEA',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'In-App Feedback',
+                            data: combinedData.map(d => d.inApp),
+                            backgroundColor: '#6B46C1',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#A0AEC0' } },
+                        y: { grid: { display: false }, ticks: { color: '#F7FAFC', font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // 3c. VoC Monthly Volume Trend
+            const vocMonthlyCtx = document.getElementById('vocMonthlyChart').getContext('2d');
+            vocMonthlyChart = new Chart(vocMonthlyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{
+                        label: 'VoC Issues',
+                        data: dashboardData.vocData.monthlyTotals,
+                        borderColor: '#9F7AEA',
+                        backgroundColor: 'rgba(159, 122, 234, 0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#9F7AEA',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#242938',
+                            titleColor: '#F7FAFC',
+                            bodyColor: '#A0AEC0',
+                            callbacks: {
+                                afterBody: function(context) {
+                                    const monthIdx = context[0].dataIndex;
+                                    const monthKeys = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10'];
+                                    const monthData = dashboardData.vocData.monthly[monthKeys[monthIdx]];
+                                    if (!monthData) return '';
+                                    
+                                    // Get top 3 categories for this month
+                                    const sorted = Object.entries(monthData)
+                                        .filter(([k, v]) => v > 0)
+                                        .sort((a, b) => b[1] - a[1])
+                                        .slice(0, 3);
+                                    
+                                    if (sorted.length === 0) return '\nNo specific themes';
+                                    
+                                    let lines = ['\n─────────────────', 'Top themes:'];
+                                    sorted.forEach(([cat, count]) => {
+                                        lines.push(`• ${cat}: ${count}`);
+                                    });
+                                    return lines.join('\n');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#A0AEC0' } },
+                        y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#A0AEC0' }, beginAtZero: true }
+                    }
+                }
+            });
+
+            // 3d. VoC Category Heatmap-style Chart (stacked bar by month)
+            const vocHeatmapCtx = document.getElementById('vocHeatmapChart').getContext('2d');
+            const vocMonthKeys = ['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10'];
+            const vocMonthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+            
+            // Get top 8 VoC categories
+            const topVocCats = Object.entries(dashboardData.vocData.yearly)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8)
+                .map(c => c[0]);
+            
+            const vocColors = ['#9F7AEA', '#6B46C1', '#319795', '#38A169', '#ED8936', '#E53E3E', '#3182CE', '#D69E2E'];
+            
+            vocHeatmapChart = new Chart(vocHeatmapCtx, {
+                type: 'bar',
+                data: {
+                    labels: vocMonthLabels,
+                    datasets: topVocCats.map((cat, i) => ({
+                        label: cat,
+                        data: vocMonthKeys.map(mk => dashboardData.vocData.monthly[mk]?.[cat] || 0),
+                        backgroundColor: vocColors[i],
+                        borderRadius: 2
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#A0AEC0', padding: 15, font: { size: 11 }, boxWidth: 12 }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#A0AEC0' } },
+                        y: { stacked: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#A0AEC0' } }
                     }
                 }
             });
@@ -1181,9 +1550,86 @@
             `).join('');
         }
 
+        // NEW: Render Three-Source Ranking Comparison
+        function renderThreeSourceRanking() {
+            const container = document.getElementById('threeSourceRanking');
+            
+            // Prepare data for each source
+            const inAppRanked = Object.entries(dashboardData.inAppYearly)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+            
+            const techServicesRanked = Object.entries(dashboardData.techServicesYearly)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+            
+            const vocRanked = Object.entries(dashboardData.vocData.yearly)
+                .filter(([k, v]) => v > 0)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8);
+            
+            function renderColumn(title, subtitle, icon, iconBg, data) {
+                const items = data.map(([name, count], i) => {
+                    const posClass = i === 0 ? 'pos-1' : i === 1 ? 'pos-2' : i === 2 ? 'pos-3' : 'pos-other';
+                    return `
+                        <div class="ranking-item">
+                            <div class="ranking-position ${posClass}">${i + 1}</div>
+                            <div class="ranking-name" title="${name}">${name}</div>
+                            <div class="ranking-count">${count}</div>
+                        </div>
+                    `;
+                }).join('');
+                
+                return `
+                    <div class="ranking-column">
+                        <div class="ranking-column-header">
+                            <div class="ranking-column-icon" style="background: ${iconBg};">${icon}</div>
+                            <div>
+                                <div class="ranking-column-title">${title}</div>
+                                <div class="ranking-column-subtitle">${subtitle}</div>
+                            </div>
+                        </div>
+                        <div class="ranking-list">${items}</div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = 
+                renderColumn('In-App Feedback', '1,232 issues (excl. Sentiment Only)', '💬', 'rgba(107, 70, 193, 0.2)', inAppRanked) +
+                renderColumn('Tech Services', '1,197 tickets (Jun-Oct)', '🎧', 'rgba(237, 137, 54, 0.2)', techServicesRanked) +
+                renderColumn('VoC Meetings', '177 themes (Jan-Oct)', '🎤', 'rgba(159, 122, 234, 0.2)', vocRanked);
+        }
+
         // ============= EVENT LISTENERS =============
         document.getElementById('monthSelect').addEventListener('change', function() {
-            updateDashboard(this.value);
+            const period = this.value;
+            updateDashboard(period);
+            
+            // Update period indicator in header
+            const indicator = document.getElementById('periodIndicator');
+            if (period === 'yearly') {
+                indicator.textContent = 'Full Year 2025';
+            } else {
+                const monthNames = {
+                    '2025-01': 'January 2025',
+                    '2025-02': 'February 2025',
+                    '2025-03': 'March 2025',
+                    '2025-04': 'April 2025',
+                    '2025-05': 'May 2025',
+                    '2025-06': 'June 2025',
+                    '2025-07': 'July 2025',
+                    '2025-08': 'August 2025',
+                    '2025-09': 'September 2025',
+                    '2025-10': 'October 2025',
+                    '2025-11': 'November 2025'
+                };
+                indicator.textContent = monthNames[period] || period;
+            }
+            
+            // Add animation to indicator
+            indicator.style.animation = 'none';
+            indicator.offsetHeight; // Trigger reflow
+            indicator.style.animation = 'fadeIn 0.3s ease';
         });
 
         // ============= INIT =============
@@ -1191,6 +1637,7 @@
             initCharts();
             buildBreakdownTable();
             renderFeatureRankings();
+            renderThreeSourceRanking();
             updateDashboard('yearly');
             renderDomainLists();
         });
