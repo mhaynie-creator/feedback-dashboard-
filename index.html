@@ -300,6 +300,106 @@
         .ranking-name { flex: 1; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .ranking-count { font-weight: 600; color: var(--text-secondary); }
         
+        /* Insight lists for commonalities and gaps */
+        .insight-list { display: flex; flex-direction: column; gap: 12px; }
+        .insight-item {
+            background: var(--bg-card-hover);
+            border-radius: 10px;
+            padding: 14px 16px;
+        }
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .insight-icon {
+            font-size: 18px;
+        }
+        .insight-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .insight-bars {
+            display: flex;
+            gap: 8px;
+        }
+        .insight-bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .insight-bar-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+        .insight-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .insight-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        .fill-inapp { background: linear-gradient(90deg, #6B46C1, #9F7AEA); }
+        .fill-tech { background: linear-gradient(90deg, #ED8936, #F6AD55); }
+        .fill-voc { background: linear-gradient(90deg, #9F7AEA, #D6BCFA); }
+        .insight-note {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            font-style: italic;
+        }
+        
+        /* Heatmap styles */
+        .heatmap-container {
+            overflow-x: auto;
+        }
+        .heatmap-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .heatmap-table th {
+            padding: 10px 8px;
+            text-align: left;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+        .heatmap-table th.source-header {
+            text-align: center;
+            min-width: 100px;
+        }
+        .heatmap-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .heatmap-table td.cat-name {
+            color: var(--text-primary);
+            font-weight: 500;
+            max-width: 200px;
+        }
+        .heatmap-cell {
+            text-align: center;
+            font-weight: 600;
+            border-radius: 4px;
+            color: white;
+        }
+        .heatmap-table tr:hover {
+            background: var(--bg-card-hover);
+        }
+        
         /* Period indicator that shows current selection */
         .period-indicator {
             display: inline-block;
@@ -521,6 +621,51 @@
                 Compare how categories rank by volume across In-App Feedback, Tech Services, and VoC Meetings
             </p>
             <div id="threeSourceRanking" class="ranking-grid"></div>
+        </section>
+        
+        <!-- NEW: Commonalities & Gaps Analysis -->
+        <section class="two-column">
+            <div class="chart-card" style="margin-bottom: 0; border-left: 4px solid var(--positive);">
+                <div class="chart-title">
+                    <span class="chart-title-icon" style="background: rgba(72, 187, 120, 0.2);">✅</span>
+                    Validated Pain Points
+                    <span class="yearly-badge">📅 2025</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 16px;">
+                    Categories that rank high across multiple sources — confirmed problems worth prioritizing
+                </p>
+                <div id="commonalitiesList" class="insight-list"></div>
+            </div>
+            <div class="chart-card" style="margin-bottom: 0; border-left: 4px solid var(--negative);">
+                <div class="chart-title">
+                    <span class="chart-title-icon" style="background: rgba(245, 101, 101, 0.2);">🔴</span>
+                    Source-Specific Blind Spots
+                    <span class="yearly-badge">📅 2025</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 16px;">
+                    Categories with major disparity — you'd miss these looking at only one source
+                </p>
+                <div id="gapsList" class="insight-list"></div>
+            </div>
+        </section>
+        
+        <!-- NEW: Source Coverage Heatmap -->
+        <section class="chart-card">
+            <div class="chart-title">
+                <span class="chart-title-icon" style="background: rgba(49, 151, 149, 0.2);">📊</span>
+                Category Coverage by Source (% of each source's total)
+                <span class="yearly-badge">📅 2025</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 16px;">
+                Heatmap showing what percentage of each source's feedback each category represents. Darker = higher concentration.
+            </p>
+            <div id="coverageHeatmap" class="heatmap-container"></div>
+            <div class="bar-legend" style="margin-top: 20px;">
+                <div class="bar-legend-item"><div class="bar-legend-dot" style="background: #1A1F2E;"></div> 0%</div>
+                <div class="bar-legend-item"><div class="bar-legend-dot" style="background: #553C9A;"></div> 10%</div>
+                <div class="bar-legend-item"><div class="bar-legend-dot" style="background: #805AD5;"></div> 20%</div>
+                <div class="bar-legend-item"><div class="bar-legend-dot" style="background: #B794F4;"></div> 40%+</div>
+            </div>
         </section>
         
         <!-- NEW: VoC vs In-App Comparison -->
@@ -1599,6 +1744,203 @@
                 renderColumn('Tech Services', '1,197 tickets (Jun-Oct)', '🎧', 'rgba(237, 137, 54, 0.2)', techServicesRanked) +
                 renderColumn('VoC Meetings', '177 themes (Jan-Oct)', '🎤', 'rgba(159, 122, 234, 0.2)', vocRanked);
         }
+        
+        // NEW: Render Commonalities and Gaps
+        function renderCommonalitiesAndGaps() {
+            const inApp = dashboardData.inAppYearly;
+            const tech = dashboardData.techServicesYearly;
+            const voc = dashboardData.vocData.yearly;
+            
+            const inAppTotal = Object.values(inApp).reduce((a, b) => a + b, 0);
+            const techTotal = Object.values(tech).reduce((a, b) => a + b, 0);
+            const vocTotal = Object.values(voc).reduce((a, b) => a + b, 0);
+            
+            // Commonalities data
+            const commonalities = [
+                {
+                    name: 'Document Functions',
+                    icon: '📄',
+                    inApp: inApp['Document Functions'] || 0,
+                    tech: tech['Document Functions'] || 0,
+                    voc: voc['Document Functions'] || 0,
+                    note: 'Universal pain point — preview, print, viewing issues affect everyone'
+                },
+                {
+                    name: 'File Management',
+                    icon: '📁',
+                    inApp: inApp['File Management'] || 0,
+                    tech: tech['File Management'] || 0,
+                    voc: voc['File Management'] || 0,
+                    note: 'Upload/download problems consistently reported across all channels'
+                },
+                {
+                    name: 'Search',
+                    icon: '🔍',
+                    inApp: inApp['Search'] || 0,
+                    tech: tech['Search'] || 0,
+                    voc: voc['Search'] || 0,
+                    note: 'Moderate but consistent — users struggle to find documents'
+                }
+            ];
+            
+            // Gaps data
+            const gaps = [
+                {
+                    name: 'Integrations',
+                    icon: '🔌',
+                    dominant: 'Tech Services',
+                    inApp: inApp['Integrations'] || 0,
+                    tech: tech['Integrations'] || 0,
+                    voc: voc['Integrations'] || 0,
+                    note: '40% of Tech Services vs <1% In-App — users call support, don\'t submit feedback'
+                },
+                {
+                    name: 'Dislike New Experience',
+                    icon: '😤',
+                    dominant: 'In-App',
+                    inApp: inApp['Dislike New Experience'] || 0,
+                    tech: 0,
+                    voc: voc['Dislike New Experience'] || 0,
+                    note: 'Reactive frustration only captured via feedback widget — invisible elsewhere'
+                },
+                {
+                    name: 'Metadata & Smart Extract',
+                    icon: '🤖',
+                    dominant: 'VoC',
+                    inApp: inApp['Metadata and Smart Extract'] || 0,
+                    tech: tech['Metadata and Smart Extract'] || 0,
+                    voc: voc['Metadata and Smart Extract'] || 0,
+                    note: 'Complex enterprise feature needs discussion — can\'t explain in feedback box'
+                },
+                {
+                    name: 'Account Management',
+                    icon: '⚙️',
+                    dominant: 'Tech Services',
+                    inApp: inApp['Account Management and Settings'] || 0,
+                    tech: tech['Account Management and Settings'] || 0,
+                    voc: voc['Account Management and Settings'] || 0,
+                    note: '22% of Tech Services — setup issues require support, not feedback'
+                }
+            ];
+            
+            function getBarWidth(value, total, maxPct = 50) {
+                const pct = (value / total) * 100;
+                return Math.min((pct / maxPct) * 100, 100);
+            }
+            
+            // Render commonalities
+            document.getElementById('commonalitiesList').innerHTML = commonalities.map(item => `
+                <div class="insight-item">
+                    <div class="insight-header">
+                        <span class="insight-icon">${item.icon}</span>
+                        <span class="insight-title">${item.name}</span>
+                    </div>
+                    <div class="insight-bars">
+                        <div class="insight-bar-group">
+                            <div class="insight-bar-label"><span>In-App</span><span>${item.inApp}</span></div>
+                            <div class="insight-bar"><div class="insight-bar-fill fill-inapp" style="width: ${getBarWidth(item.inApp, inAppTotal)}%"></div></div>
+                        </div>
+                        <div class="insight-bar-group">
+                            <div class="insight-bar-label"><span>Tech Svc</span><span>${item.tech}</span></div>
+                            <div class="insight-bar"><div class="insight-bar-fill fill-tech" style="width: ${getBarWidth(item.tech, techTotal)}%"></div></div>
+                        </div>
+                        <div class="insight-bar-group">
+                            <div class="insight-bar-label"><span>VoC</span><span>${item.voc}</span></div>
+                            <div class="insight-bar"><div class="insight-bar-fill fill-voc" style="width: ${getBarWidth(item.voc, vocTotal)}%"></div></div>
+                        </div>
+                    </div>
+                    <div class="insight-note">💡 ${item.note}</div>
+                </div>
+            `).join('');
+            
+            // Render gaps
+            document.getElementById('gapsList').innerHTML = gaps.map(item => `
+                <div class="insight-item">
+                    <div class="insight-header">
+                        <span class="insight-icon">${item.icon}</span>
+                        <span class="insight-title">${item.name}</span>
+                        <span style="margin-left: auto; font-size: 10px; background: var(--border-color); padding: 2px 8px; border-radius: 10px; color: var(--text-secondary);">${item.dominant} dominant</span>
+                    </div>
+                    <div class="insight-bars">
+                        <div class="insight-bar-group">
+                            <div class="insight-bar-label"><span>In-App</span><span>${item.inApp}</span></div>
+                            <div class="insight-bar"><div class="insight-bar-fill fill-inapp" style="width: ${getBarWidth(item.inApp, inAppTotal)}%"></div></div>
+                        </div>
+                        <div class="insight-bar-group">
+                            <div class="insight-bar-label"><span>Tech Svc</span><span>${item.tech}</span></div>
+                            <div class="insight-bar"><div class="insight-bar-fill fill-tech" style="width: ${getBarWidth(item.tech, techTotal)}%"></div></div>
+                        </div>
+                        <div class="insight-bar-group">
+                            <div class="insight-bar-label"><span>VoC</span><span>${item.voc}</span></div>
+                            <div class="insight-bar"><div class="insight-bar-fill fill-voc" style="width: ${getBarWidth(item.voc, vocTotal)}%"></div></div>
+                        </div>
+                    </div>
+                    <div class="insight-note">🚨 ${item.note}</div>
+                </div>
+            `).join('');
+        }
+        
+        // NEW: Render Coverage Heatmap
+        function renderCoverageHeatmap() {
+            const inApp = dashboardData.inAppYearly;
+            const tech = dashboardData.techServicesYearly;
+            const voc = dashboardData.vocData.yearly;
+            
+            const inAppTotal = Object.values(inApp).reduce((a, b) => a + b, 0);
+            const techTotal = Object.values(tech).reduce((a, b) => a + b, 0);
+            const vocTotal = Object.values(voc).reduce((a, b) => a + b, 0);
+            
+            // Get all categories and sort by total volume across sources
+            const allCats = [...new Set([...Object.keys(inApp), ...Object.keys(tech), ...Object.keys(voc)])];
+            const catData = allCats.map(cat => ({
+                name: cat,
+                inApp: inApp[cat] || 0,
+                tech: tech[cat] || 0,
+                voc: voc[cat] || 0,
+                inAppPct: ((inApp[cat] || 0) / inAppTotal * 100),
+                techPct: ((tech[cat] || 0) / techTotal * 100),
+                vocPct: ((voc[cat] || 0) / vocTotal * 100),
+                total: (inApp[cat] || 0) + (tech[cat] || 0) + (voc[cat] || 0)
+            })).sort((a, b) => b.total - a.total);
+            
+            function getHeatColor(pct) {
+                if (pct >= 30) return { bg: '#B794F4', text: '#1A1F2E' };
+                if (pct >= 15) return { bg: '#805AD5', text: 'white' };
+                if (pct >= 8) return { bg: '#6B46C1', text: 'white' };
+                if (pct >= 3) return { bg: '#553C9A', text: 'white' };
+                if (pct >= 1) return { bg: '#44337A', text: '#A0AEC0' };
+                return { bg: '#2D3348', text: '#718096' };
+            }
+            
+            const rows = catData.map(cat => {
+                const inAppColor = getHeatColor(cat.inAppPct);
+                const techColor = getHeatColor(cat.techPct);
+                const vocColor = getHeatColor(cat.vocPct);
+                
+                return `
+                    <tr>
+                        <td class="cat-name">${cat.name}</td>
+                        <td class="heatmap-cell" style="background: ${inAppColor.bg}; color: ${inAppColor.text};">${cat.inAppPct.toFixed(1)}%</td>
+                        <td class="heatmap-cell" style="background: ${techColor.bg}; color: ${techColor.text};">${cat.techPct.toFixed(1)}%</td>
+                        <td class="heatmap-cell" style="background: ${vocColor.bg}; color: ${vocColor.text};">${cat.vocPct.toFixed(1)}%</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('coverageHeatmap').innerHTML = `
+                <table class="heatmap-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th class="source-header">💬 In-App<br><span style="font-weight: 400; font-size: 10px;">(${inAppTotal} total)</span></th>
+                            <th class="source-header">🎧 Tech Services<br><span style="font-weight: 400; font-size: 10px;">(${techTotal} total)</span></th>
+                            <th class="source-header">🎤 VoC<br><span style="font-weight: 400; font-size: 10px;">(${vocTotal} total)</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        }
 
         // ============= EVENT LISTENERS =============
         document.getElementById('monthSelect').addEventListener('change', function() {
@@ -1638,6 +1980,8 @@
             buildBreakdownTable();
             renderFeatureRankings();
             renderThreeSourceRanking();
+            renderCommonalitiesAndGaps();
+            renderCoverageHeatmap();
             updateDashboard('yearly');
             renderDomainLists();
         });
