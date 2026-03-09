@@ -1,0 +1,49 @@
+{
+  "period": "2025-04",
+  "total": 257,
+  "categories": {
+    "Sentiment Only": 157,
+    "User Interface & Navigation": 25,
+    "File Management": 17,
+    "Dislike New Experience": 9,
+    "Performance & Speed": 9,
+    "Login & Access": 8,
+    "Document Functions": 8,
+    "Collaboration": 7,
+    "System Stability": 6,
+    "Visual & Accessibility": 5
+  },
+  "sentiment": {
+    "Positive": 83,
+    "Negative": 95,
+    "Neutral": 79
+  },
+  "userType": {
+    "Guest": 121,
+    "Regular": 136
+  },
+  "system": {
+    "Browser": 215,
+    "Desktop": 42
+  },
+  "guestTop5": {
+    "Sentiment Only": 83,
+    "User Interface & Navigation": 13,
+    "File Management": 8,
+    "Collaboration": 6,
+    "Login & Access": 5
+  },
+  "regularTop5": {
+    "Sentiment Only": 74,
+    "User Interface & Navigation": 12,
+    "File Management": 9,
+    "Dislike New Experience": 8,
+    "Document Functions": 8
+  },
+  "churnRisk": [],
+  "takeaways": [
+    "\u2022 <strong>Negative sentiment dominates:</strong> 37.0% negative vs 32.3% positive",
+    "\u2022 <strong>High guest volume:</strong> 47.1% feedback from guest users",
+    "\u2022 <strong>Top functional issue:</strong> User Interface & Navigation (25 mentions)"
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "period": "2026-01",
+  "total": 145,
+  "categories": {
+    "Sentiment Only": 58,
+    "User Interface & Navigation": 18,
+    "Performance & Speed": 15,
+    "Document Functions": 13,
+    "Login & Access": 9,
+    "Dislike New Experience": 7,
+    "Other": 7,
+    "Collaboration": 7,
+    "System Stability": 3,
+    "File Management": 2,
+    "Account Management and Settings": 2,
+    "Metadata and Smart Extract": 2,
+    "Emails, Notifications and Alerts": 1,
+    "Visual & Accessibility": 1
+  },
+  "sentiment": {
+    "Negative": 68,
+    "Positive": 54,
+    "Neutral": 19
+  },
+  "userType": {
+    "Regular": 93,
+    "Guest": 52
+  },
+  "system": {
+    "Browser": 117,
+    "Desktop": 28
+  },
+  "guestTop5": {
+    "Sentiment Only": 25,
+    "Collaboration": 8,
+    "User Interface & Navigation": 6,
+    "Document Functions": 5,
+    "File Management": 3
+  },
+  "regularTop5": {
+    "Sentiment Only": 33,
+    "Performance & Speed": 14,
+    "Document Functions": 8,
+    "Dislike New Experience": 7,
+    "Login & Access": 6
+  },
+  "churnRisk": [
+    {
+      "domain": "coatesfs.com",
+      "accountId": "47367",
+      "note": "worse data sharing program...cost me hours in productive work",
+      "userType": "Regular"
+    },
+    {
+      "domain": "latitudesubro.com",
+      "accountId": "",
+      "note": "STOP WITH THE TWO FACTOR AUTHENTICATION",
+      "userType": "Regular"
+    }
+  ],
+  "needsFollowup": [],
+  "kindOfFeedback": {
+    "General Feedback": 135,
+    "Enhancement Request": 8,
+    "Bug": 2
+  },
+  "outreach": {
+    "No follow-up needed": 135,
+    "Needs follow-up": 6,
+    "Churn risk": 2,
+    "UXR candidate": 1
+  },
+  "takeaways": [
+    "• <strong>Negative sentiment leads:</strong> 46.9% negative vs 37.2% positive",
+    "• <strong>Guest satisfaction gap:</strong> Guests 48.1% positive vs Regular users 31.2% positive",
+    "• <strong>Top functional issue:</strong> User Interface & Navigation (18 mentions)",
+    "• <strong>Churn risk alert:</strong> 2 accounts flagged for immediate attention",
+    "• <strong>Regular user pain points:</strong> Performance & Speed (22.9% of negatives), Document Functions (18.8%)"
+  ]
+}

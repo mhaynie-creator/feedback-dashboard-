@@ -1,0 +1,47 @@
+{
+  "period": "2025-11",
+  "total": 155,
+  "categories": {
+    "Sentiment Only": 57,
+    "Document Functions": 21,
+    "User Interface & Navigation": 20,
+    "Collaboration": 15,
+    "Dislike New Experience": 9,
+    "Performance & Speed": 7,
+    "Login & Access": 7,
+    "Metadata and Smart Extract": 4,
+    "System Stability": 4
+  },
+  "sentiment": {
+    "Positive": 42,
+    "Negative": 96,
+    "Neutral": 17
+  },
+  "userType": {
+    "Guest": 45,
+    "Regular": 110
+  },
+  "system": {
+    "Browser": 108,
+    "Desktop": 47
+  },
+  "guestTop5": {
+    "Sentiment Only": 26,
+    "Collaboration": 7,
+    "User Interface & Navigation": 5,
+    "Metadata and Smart Extract": 3,
+    "Performance & Speed": 2
+  },
+  "regularTop5": {
+    "Sentiment Only": 31,
+    "Document Functions": 19,
+    "User Interface & Navigation": 15,
+    "Dislike New Experience": 9,
+    "Collaboration": 8
+  },
+  "churnRisk": [],
+  "takeaways": [
+    "\u2022 <strong>Negative sentiment dominates:</strong> 61.9% negative vs 27.1% positive",
+    "\u2022 <strong>Top functional issue:</strong> Document Functions (21 mentions)"
+  ]
+}
