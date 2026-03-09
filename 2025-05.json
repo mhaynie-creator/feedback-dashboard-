@@ -1,0 +1,47 @@
+{
+  "period": "2025-05",
+  "total": 286,
+  "categories": {
+    "Sentiment Only": 170,
+    "Dislike New Experience": 34,
+    "System Stability": 14,
+    "Document Functions": 12,
+    "Visual & Accessibility": 11,
+    "File Management": 10,
+    "User Interface & Navigation": 10,
+    "Performance & Speed": 7,
+    "Search": 5
+  },
+  "sentiment": {
+    "Negative": 105,
+    "Neutral": 128,
+    "Positive": 53
+  },
+  "userType": {
+    "Regular": 234,
+    "Guest": 52
+  },
+  "system": {
+    "Browser": 165,
+    "Desktop": 121
+  },
+  "guestTop5": {
+    "Sentiment Only": 34,
+    "Visual & Accessibility": 6,
+    "File Management": 4,
+    "User Interface & Navigation": 3,
+    "Dislike New Experience": 2
+  },
+  "regularTop5": {
+    "Sentiment Only": 136,
+    "Dislike New Experience": 32,
+    "System Stability": 14,
+    "Document Functions": 11,
+    "User Interface & Navigation": 7
+  },
+  "churnRisk": [],
+  "takeaways": [
+    "\u2022 <strong>Negative sentiment dominates:</strong> 36.7% negative vs 18.5% positive",
+    "\u2022 <strong>Top functional issue:</strong> Dislike New Experience (34 mentions)"
+  ]
+}
